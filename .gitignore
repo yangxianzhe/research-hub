@@ -1,0 +1,10 @@
+/target/
+/data/
+/.idea/
+*.iml
+.env
+*.log
+
+# Local interview preparation notes and exports
+/Research-Hub-面试记忆精华.md
+/Research-Hub-面试记忆精华.pdf
