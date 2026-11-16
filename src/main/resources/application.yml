@@ -1,0 +1,51 @@
+server:
+  port: ${PORT:8081}
+  shutdown: graceful
+  error:
+    include-message: never
+spring:
+  application:
+    name: research-hub
+  datasource:
+    url: ${RESEARCH_DB_URL:jdbc:h2:file:./data/research-hub;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000}
+    username: sa
+    password: ${RESEARCH_DB_PASSWORD:}
+    hikari:
+      maximum-pool-size: 8
+  servlet:
+    multipart:
+      max-file-size: 8MB
+      max-request-size: 9MB
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  task:
+    scheduling:
+      pool:
+        size: 2
+springdoc:
+  swagger-ui:
+    path: /docs
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  endpoint:
+    health:
+      show-details: never
+hub:
+  jobs:
+    concurrency: 2
+    max-attempts: 3
+    lease-seconds: 120
+    poll-ms: 500
+  llm:
+    # local 是可离线运行的摘录模式，返回内容中会标记实际模式。
+    mode: ${RESEARCH_LLM_MODE:local}
+    base-url: ${RESEARCH_LLM_BASE_URL:http://localhost:8080/v1}
+    api-key: ${RESEARCH_LLM_API_KEY:}
+    model: ${RESEARCH_LLM_MODEL:}
+    timeout-seconds: 45
